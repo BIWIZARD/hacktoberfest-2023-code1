@@ -1,0 +1,71 @@
+Given a singly linked list of size N of integers. The task is to check if the given linked list is palindrome or not.
+
+Example 1:
+
+Input:
+N = 3
+value[] = {1,2,1}
+Output: 1
+Explanation: The given linked list is
+1 2 1 , which is a palindrome and
+Hence, the output is 1.
+
+
+
+class ListNode:
+    def __init__(self, val):
+        self.val = val
+        self.next = None
+
+def isPalindrome(head):
+    if not head or not head.next:
+        return True
+
+    # Find the middle of the linked list
+    slow = head
+    fast = head
+    while fast.next and fast.next.next:
+        slow = slow.next
+        fast = fast.next.next
+
+    # Reverse the second half of the linked list
+    second_half = slow.next
+    slow.next = None
+    prev = None
+    current = second_half
+    while current:
+        next_node = current.next
+        current.next = prev
+        prev = current
+        current = next_node
+
+    # Compare the first and reversed second halves
+    first_half = head
+    second_half = prev
+    while first_half and second_half:
+        if first_half.val != second_half.val:
+            return False
+        first_half = first_half.next
+        second_half = second_half.next
+
+    return True
+
+# Helper function to create a linked list from a list of values
+def createLinkedList(values):
+    head = None
+    current = None
+    for val in values:
+        node = ListNode(val)
+        if not head:
+            head = node
+            current = head
+        else:
+            current.next = node
+            current = node
+    return head
+
+# Example usage:
+values = [1, 2, 1]
+head = createLinkedList(values)
+result = isPalindrome(head)
+print(result)
